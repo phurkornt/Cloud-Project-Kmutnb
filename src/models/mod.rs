@@ -1,2 +1,2 @@
 pub mod product;
-pub mod lotterry;
+pub mod lotterry_model;

@@ -2,9 +2,12 @@ use actix_web::{App, HttpServer, middleware};
 use env_logger::Env;
 
 pub mod routes;
+
 mod controllers;
 mod models;
-use crate::routes::{cart_routes, shipping_routes,lottery};
+
+
+use crate::routes::*;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -15,8 +18,15 @@ async fn main() -> std::io::Result<()> {
        App::new()
             .wrap(middleware::Logger::default())
             .configure(cart_routes::config)
-            .configure(lottery::config)
             .configure(shipping_routes::config)
+
+            .configure(lottery_routes::config)
+            .configure(basket_routes::config)
+            .configure(prize_routes::config)
+            .configure(customer_routes::config)
+            
+            .configure(admin_routes::config)
+
    })
    .bind("127.0.0.1:3000")?
    .run()
