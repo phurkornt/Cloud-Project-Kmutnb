@@ -1,6 +1,5 @@
 
-use actix_web::{web, get , put , Responder, HttpResponse, http::StatusCode};
-use serde_json::json;
+use actix_web::{web, get , put , Responder, HttpResponse};
 use serde::Deserialize;
 use log::{debug};
 
@@ -9,19 +8,17 @@ use log::{debug};
 use crate::models::lotterry_model::{Lottery,UserLottery};
 use std::convert::TryFrom;
 
+
 #[derive(Deserialize)]
 struct GetUserData {
-    id:i32
+    user_id:i32
 }
 
 #[get("/lottery")]
 async fn get_lottery(user_id: web::Json<GetUserData>) -> impl Responder {
     // match id and return all lottery  and basket count
-    if user_id.id == 1{
-        
+    if user_id.user_id == 1{
         // println!("{:#?}", user_lottery);
-        
-
         let lottery_item = vec![
             Lottery {
                 lottery_id: 1,
@@ -55,11 +52,18 @@ async fn get_lottery(user_id: web::Json<GetUserData>) -> impl Responder {
 
 
 #[put("/lottery")]
-async fn put_lottery(lottery: web::Json<Lottery>) -> impl Responder {
-    
+async fn put_lottery(lottery: web::Json<Vec<Lottery>>) -> impl Responder {
+    debug!("{:?}", lottery);
+    for i in &lottery[..] {
+        println!("Lottery ID: {}", i.lottery_id);
+        println!("Lottery number: {}", i.lottery_number);
+    }
 
+    // Next action at DB
+
+    HttpResponse::Ok().body("Lotteries received")
     // รอใช้ DB
-    return HttpResponse::Ok().json(lottery);
+    // return HttpResponse::Ok().json(lottery);
     
     
 }
