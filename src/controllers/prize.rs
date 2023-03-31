@@ -6,11 +6,17 @@ use log::{debug};
 
 
 
-// use crate::models::lotterry::{Lottery,UserLottery};
+use crate::models::prize_model::{LotteryNumber , LotteryReward};
 // use std::convert::TryFrom;
 
 
 #[get("/prize")]
-async fn get_prize() -> impl Responder {
-    return HttpResponse::Ok().json("OK get");
+async fn get_prize(lottery_number: web::Json<LotteryNumber>) -> impl Responder {
+    debug!("{:?}" , &lottery_number);
+
+    let res = LotteryReward{
+        reward_name:"รางวัลที่ 1 2 3 4".to_string()
+    };
+
+    return HttpResponse::Ok().json(res);
 }
