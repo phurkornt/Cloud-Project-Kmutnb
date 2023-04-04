@@ -1,45 +1,50 @@
 
 use actix_web::{web, get , put , Responder, HttpResponse};
-use serde::Deserialize;
+
+use serde::{Deserialize, Serialize};
+
+
+
 use log::{debug};
 
+use crate::models::lotterry_model::{*, self};
+use crate::models::basket_model::get_user_count_basket;
+
+// use std::convert::TryFrom;
+
+// use crate::config::db::getDB;
+
+#[derive(Debug, Deserialize, Serialize)]
+struct Payment {
+    lottery_number: String,
+}
 
 
-use crate::models::lotterry_model::{Lottery,UserLottery};
-use std::convert::TryFrom;
+#[derive(Debug, Deserialize, Serialize)]
+struct LotteryData {
+    lotteries: Vec<Lottery>,
+}
 
 
-#[derive(Deserialize)]
+#[derive(Deserialize , Serialize)]
 struct GetUserData {
     user_id:i32
 }
 
 #[get("/lottery")]
 async fn get_lottery(user_id: web::Json<GetUserData>) -> impl Responder {
-    // match id and return all lottery  and basket count
-    if user_id.user_id == 1{
-        // println!("{:#?}", user_lottery);
-        let lottery_item = vec![
-            Lottery {
-                lottery_id: 1,
-                lottery_number: "123456".to_string()
-            },
-            Lottery {
-                lottery_id: 2,
-                lottery_number: "123456".to_string()
-            },
-            Lottery {
-                lottery_id: 3,
-                lottery_number: "123456".to_string()
-            }
-        ];
 
+    
+    if user_id.user_id == 1{
+    
+        let lottery_item = lotterry_model::get_lottery();
         
         let res = UserLottery{
-            user_basket_count:u32::try_from(lottery_item.len()).unwrap(),
+            user_basket_count:get_user_count_basket(),
             lottery_all:lottery_item
         };
 
+        
         return HttpResponse::Ok().json(res);
 
     }else{

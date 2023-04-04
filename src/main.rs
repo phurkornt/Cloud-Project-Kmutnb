@@ -5,6 +5,7 @@ pub mod routes;
 
 mod controllers;
 mod models;
+mod config;
 
 
 use crate::routes::*;
