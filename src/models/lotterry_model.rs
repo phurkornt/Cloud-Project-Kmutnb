@@ -3,7 +3,7 @@ use serde::{Serialize, Deserialize};
 use mysql::*;
 use mysql::prelude::*;
 
-use crate::config::db::getDB;
+use crate::config::db::conDB;
 
 #[derive(Debug,Serialize, Deserialize)]
 pub struct Lottery {
@@ -26,10 +26,11 @@ pub struct LotteryList {
 
 // --------------------- Get All lottery in db ---------------------
 pub fn get_lottery() -> Vec<Lottery>{
-    let db = getDB()
+    let db = conDB()
     .map(|mut conn| {
         conn.query_map(
-            "SELECT lottery_id,lottery_number FROM lottery",
+            // เพิม่ Date ด้วย
+            "SELECT lottery_id,lottery_number FROM lottery where lottery_status = 'available'; ",
             |(lottery_id , lottery_number)| {
                 Lottery 
                 {   
@@ -51,9 +52,6 @@ pub fn get_lottery() -> Vec<Lottery>{
             for i in lotteries{
                 data.push(i);
             }
-            // data = LotteryList{
-            //     lottery_all:lotteries
-            // };
         }
         Err(e) => println!("Error: {}", e)
     }
@@ -65,7 +63,9 @@ pub fn get_lottery() -> Vec<Lottery>{
 
 
 
+
 /*
+
 
 
 // let mut tt:UserLottery = Default::default();

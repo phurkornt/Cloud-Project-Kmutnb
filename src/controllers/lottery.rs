@@ -40,7 +40,7 @@ async fn get_lottery(user_id: web::Json<GetUserData>) -> impl Responder {
         let lottery_item = lotterry_model::get_lottery();
         
         let res = UserLottery{
-            user_basket_count:get_user_count_basket(),
+            user_basket_count:get_user_count_basket(user_id.user_id.try_into().unwrap()),
             lottery_all:lottery_item
         };
 
