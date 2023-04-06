@@ -23,6 +23,13 @@ pub struct LotteryList {
 }
 
 
+#[derive(Debug,Serialize, Deserialize , Default)]
+pub struct UpdateStatus{
+    pub lottery_id: Vec<u32>,
+    pub status: String
+}
+
+
 
 // --------------------- Get All lottery in db ---------------------
 pub fn get_lottery() -> Vec<Lottery>{
@@ -61,6 +68,27 @@ pub fn get_lottery() -> Vec<Lottery>{
 }
 
 
+// --------------------- update status with [1,2,3,4] , "status:sold-out" ---------------------
+pub fn update_lottery_status(list_lottery_id:Vec<u32> ,status:String){
+
+    let list_lottery_string = list_lottery_id.iter().map(|n| n.to_string()).collect::<Vec<String>>().join(",");
+    let list_lottery_str: &str = &list_lottery_string;
+
+    let _ = match conDB() {
+        Ok(mut conn) => {
+            conn.exec_drop(
+            "UPDATE lottery SET lottery_status = :status  WHERE lottery_id in (".to_owned() +list_lottery_str+") ;",
+            params! {
+                "status" => status
+            },
+        )},
+        Err(e) => {
+            println!("Failed to get DB connection: {}", e);
+            return;
+        }
+    };
+    
+}
 
 
 

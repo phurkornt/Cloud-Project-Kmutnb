@@ -1,56 +1,40 @@
 
-use actix_web::{web, get ,post,delete , Responder, HttpResponse, http::StatusCode};
-use serde_json::json;
+use actix_web::{web, get ,post,delete , Responder, HttpResponse };
 use serde::Deserialize;
 use log::{debug};
 
-
-
 use crate::models::basket_model::*;
-use crate::config::db::conDB;
-
-
-use mysql::*;
-use mysql::prelude::*;
-    
-
-
-// use std::convert::TryFrom;
-
 
 #[derive(Debug , Deserialize)]
 struct GetUserData {
     user_id:i32
 }
 
-
 #[post("/basket")]//[/]
 async fn post_basket(lottery: web::Json<LotteryWithUserID>) -> impl Responder {
-    let vail_lot = get_user_lottery();
+    let vail_lot = get_user_lottery_id();
     
-    let mut isSame = false;
+
+    let mut is_same = false;
     for i in vail_lot{
         if i.lottery_id == lottery.lottery.lottery_id {
             // debug!("MATH");
-            isSame = true;
+            is_same = true;
             break;
         }
     }
-    if isSame == false{
+    if is_same == false{
+        // [1] insert ลง db ตะกร้า   
         insert_user_basket( lottery.user_id , lottery.lottery.lottery_id);
         let count = LotteryCount { 
             lottery_count: get_user_count_basket(lottery.user_id.try_into().unwrap())
         };
+        // [2] res จำนวน lottery ในตะกร้า 
         return HttpResponse::Ok().json(&count);
     }else{
         return HttpResponse::Unauthorized().json("มีเลขนี้อยู่เเล้ว");
     }
 
-    // debug!("COM   {:?}", tt);
-    // getDB
-    // [1] insert ลง db ตะกร้า   
-    // debug!("TEST {:?}",&lottery);
-    // [2] res จำนวน lottery ในตะกร้า 
     
     
     
@@ -64,20 +48,7 @@ async fn get_basket(user_id: web::Json<GetUserData>) -> impl Responder {
     debug!("TEST {:?}",&user_id);
     if user_id.user_id == 1{
         // [2] res select lottery ทั้งหมดในตะกร้า user
-        let lottery_item = vec![
-            Lottery {
-                lottery_id: 1,
-                lottery_number: "123456".to_string()
-            },
-            Lottery {
-                lottery_id: 2,
-                lottery_number: "123456".to_string()
-            },
-            Lottery {
-                lottery_id: 3,
-                lottery_number: "123456".to_string()
-            }
-        ];
+        let lottery_item = get_user_lottery_number();
 
         HttpResponse::Ok().json(lottery_item)
 
@@ -88,35 +59,26 @@ async fn get_basket(user_id: web::Json<GetUserData>) -> impl Responder {
 }
 
 
+
 #[delete("/basket")]//[/]
 async fn delete_basket(lottery: web::Json<LotteryIDwithUserID>) -> impl Responder {
     
     // [1] ตรวจสอบ userID
     debug!("TEST {:?}",&lottery);
+    // lottery.user_id , lottery.lottery.lottery_id
+    delete_user_basket(lottery.user_id , lottery.lottery_id);
     // [2] delete lottery by id ในตะกร้า 
-
     return HttpResponse::Ok().json("OK delete");
 }
 
 
-#[get("/basket/verification")]//[]
+#[get("/basket/verification")]//[x]
 async fn get_basket_verification(lottery: web::Json<LotteryArrayID>) -> impl Responder {
 
     // [1] ตรวจสอบ userID
     debug!("TEST {:?}",&lottery);
-
-    
     // [2] ตรวจ lottery by id ในตะกร้า ว่ามีคนซื้อไปยัง 
-    let lottery_item = vec![
-            Lottery {
-                lottery_id: 8,
-                lottery_number: "123456".to_string()
-            },
-            Lottery {
-                lottery_id: 5,
-                lottery_number: "123456".to_string()
-            }
-        ];
+    let lottery_item =get_user_lottery_soldout(lottery.into_inner().lottery_id);
 
     return HttpResponse::Ok().json(lottery_item);
 }
