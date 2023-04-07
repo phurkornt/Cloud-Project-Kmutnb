@@ -76,7 +76,7 @@ async fn delete_basket(lottery: web::Json<LotteryIDwithUserID>) -> impl Responde
 async fn get_basket_verification(lottery: web::Json<LotteryArrayID>) -> impl Responder {
 
     // [1] ตรวจสอบ userID
-    debug!("TEST {:?}",&lottery);
+    debug!("TEST verification {:?}",&lottery);
     // [2] ตรวจ lottery by id ในตะกร้า ว่ามีคนซื้อไปยัง 
     let lottery_item =get_user_lottery_soldout(lottery.into_inner().lottery_id);
 
