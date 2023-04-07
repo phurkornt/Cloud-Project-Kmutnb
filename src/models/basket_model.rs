@@ -52,7 +52,7 @@ pub fn get_user_count_basket(user_id:u32) -> u32{
     .map(|mut conn| {
         conn.query_map(
             "SELECT COUNT(lottery_id) FROM basket WHERE user_id = ".to_owned() + user_id.to_string().as_str(),
-            |(count)| {
+            |count| {
                 CountBasketUser 
                 {   
                     count
@@ -69,7 +69,6 @@ pub fn get_user_count_basket(user_id:u32) -> u32{
     let mut count:u32 = 0;
     match db {
         Ok(number) => {
-            count = 0 ;
             if number.len() > 0{
                 count = number[0].count;
             }
@@ -196,7 +195,6 @@ pub fn delete_user_basket(user_id:u32 , lottery_id:u32){
 
 // --------------------- Get vertifycation lottery ของ user กับ lottery หลัก   ---------------------
 pub fn get_user_lottery_soldout(list_lottery:Vec<u32>) -> Vec<Lottery>{
-    // SELECT bt.lottery_id , lot.lottery_number FROM basket bt , lottery lot  WHERE  bt.user_id = 1 and bt.lottery_id = lot.lottery_id and lot.lottery_id  in (1,4) and lot.lottery_status = "sold-out"
     let list_lottery_string = list_lottery.iter().map(|n| n.to_string()).collect::<Vec<String>>().join(",");
     let list_lottery_str: &str = &list_lottery_string;
     let db = conDB()
@@ -232,7 +230,3 @@ pub fn get_user_lottery_soldout(list_lottery:Vec<u32>) -> Vec<Lottery>{
 
 
 
-
-// --------------------- insert to history for user  ---------------------
-
-// wait 

@@ -85,8 +85,7 @@ pub fn get_user_history(user_id:u32) -> Vec<LotteryWithDate>{
     let db = conDB()
     .map(|mut conn| {
         conn.query_map(
-            // เพิม่ Date ด้วย
-            "SELECT lottery_number, Datetime FROM user_history WHERE user_id = 1",
+            "SELECT lottery_number, Datetime FROM user_history WHERE user_id = ".to_owned() + user_id.to_string().as_str(),
             |(lottery_number ,datetime)| {
                 LotteryWithDate 
                 {   
@@ -97,8 +96,6 @@ pub fn get_user_history(user_id:u32) -> Vec<LotteryWithDate>{
         )
     })
     .unwrap_or_else(|_| {
-        // กรณีเกิด error หรือไม่สามารถเชื่อมต่อฐานข้อมูลได้
-        // return ค่า default ของ Vec<Payment>
         Ok(Vec::new())
     });
    
@@ -113,6 +110,5 @@ pub fn get_user_history(user_id:u32) -> Vec<LotteryWithDate>{
     }
 
     return data;
-    
 }
 

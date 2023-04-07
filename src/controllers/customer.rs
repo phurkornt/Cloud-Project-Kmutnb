@@ -1,7 +1,6 @@
 
 use actix_web::{web, post , get  , Responder, HttpResponse};
 use serde_json::json;
-use serde::Deserialize;
 use log::{debug};
 
 
@@ -9,8 +8,6 @@ use crate::models::customer_model::*;
 use crate::models::basket_model::{Lottery};
 
 
-use reqwest::blocking::Client;
-use std::collections::HashMap;
 // use std::convert::TryFrom;
 
 #[post("/customer")]
@@ -106,10 +103,6 @@ async fn post_customer_purchasing(lottery: web::Json<LotteryList>) -> impl Respo
 }
 
     
-
-
-
-
 #[get("/customer")]
 async fn get_customer_lottery(user: web::Json<UserID>) -> impl Responder {
    
