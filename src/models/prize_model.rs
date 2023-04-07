@@ -4,7 +4,7 @@ use mysql::prelude::*;
 
 use crate::config::db::conDB;
 use crate::controllers::lottery;
-
+use chrono::{Local, DateTime};
 //  ---------------------------------- Data Input ----------------------------------
 #[derive(Debug,Serialize, Deserialize)]
 pub struct LotteryNumber {
@@ -36,10 +36,13 @@ pub struct RewardNumber {
 
 // ####################### get 1st prize with "lottery_number : 123456" #######################
 pub fn get_prize_with_date() -> String{
+    let time_now: DateTime<Local> = Local::now();
+    let formatted = time_now.format("%Y-%m-%d").to_string();
+
     let db = conDB()
     .map(|mut conn| {
         conn.query_map(
-            " SELECT reward_number FROM reward WHERE DATE(Datetime) = '2023-03-27'; ",
+            " SELECT reward_number FROM reward WHERE DATE(Datetime) = '".to_owned() + formatted.as_str() + "' ",
             |lottery_number| {
                 RewardNumber 
                 {   
