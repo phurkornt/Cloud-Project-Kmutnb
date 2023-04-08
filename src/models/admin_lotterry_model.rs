@@ -18,6 +18,12 @@ pub struct AdminIDCount {
     pub lottery_count:u32
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct AdminIdDate {
+    pub admin_id: u32,
+    pub date:String
+}
+
 
 
 
@@ -112,7 +118,7 @@ pub fn get_date_unique() -> Vec<Date>{
 
 
 
-// ####################### get_date_unique (วันที่เพื่อนำไปประกอบข้อมูล) ->["11/11/111" , "11/11/111"] #######################
+// ####################### insert_lottery ->"123456" #######################
 pub fn insert_lottery(lottery_number:String){
     let time_now: DateTime<Local> = Local::now();
     let formatted = time_now.format("%Y-%m-%d %H:%M:%S").to_string();
@@ -124,6 +130,25 @@ pub fn insert_lottery(lottery_number:String){
             params! {
                 "lottery_number" => lottery_number,
                 "time_now" => formatted
+            },
+        )},
+        Err(e) => {
+            println!("Failed to get DB connection: {}", e);
+            return;
+        }
+    };
+}
+
+
+
+// ####################### delete_lottery_byDate ->"" #######################
+pub fn delete_lottery_byDate(date:String){
+    let _ = match conDB() {
+        Ok(mut conn) => {
+            conn.exec_drop(
+            "DELETE FROM lottery WHERE Date(Datetime) = :date ;",
+            params! {
+                "date" => date
             },
         )},
         Err(e) => {

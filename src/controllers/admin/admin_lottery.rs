@@ -50,10 +50,18 @@ async fn post_admin_lottery(admin: web::Json<AdminIDCount>) -> impl Responder {
     return HttpResponse::Ok().json("OK post admin");
 }
 #[delete("/admin/lottery")]
-async fn delete_admin_lottery() -> impl Responder {
-   
+async fn delete_admin_lottery(admin: web::Json<AdminIdDate>) -> impl Responder {
+    let admin = admin.into_inner();
+    if admin.admin_id == 1{
+
+        delete_lottery_byDate(admin.date);
+        return HttpResponse::Ok().json("lottery_detail");
+
+    }else{
+
+        return HttpResponse::Unauthorized().json("Error");
+    }
     
-    return HttpResponse::Ok().json("OK delete admin");
 }
 
 
