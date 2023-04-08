@@ -1,0 +1,477 @@
+FORMAT: 1A
+HOST: https://polls.apiblueprint.org/
+
+# Lotterry Team
+
+
+For web sale lottery 
+
+        <!------------------------------------------- สำหรับดึงlotมาเเสดง ----------------------------------------- -->
+## loterry [/lottery]
+### get all loterry[GET]
+
++ Request (application/json)
+
+        
+        {
+            "user_id":1
+        }
+        
++ Response 200 (application/json)
+
+        {
+        
+            user_basket_count:3,
+            lottery_all:[
+                            {
+                                "lottery_id": 1,
+                                "lottery_number": "123456"
+                            },
+                            {
+                                "lottery_id": 2,
+                                "lottery_number": "123456"
+                            }
+                        ]
+        }
+    
++ Response 404 (application/json)
+
+### update status lottery[PUT]
+
++ Request (application/json)
+
+        {
+            "lottery_id": [1,2,3,4],
+            "status":"sold-out"
+        }
+        
++ Response 200 (application/json)
++ Response 404 (application/json)
+
+
+
+
+        <!-------------------------------------------  db เพิ่มlotลงตะกร้า   -----------------------------------------  -->
+## basket [/basket]
+### insert to basket [POST]
+
+
++ Request (application/json)
+
+        {
+            "user_id": 1,
+            "lottery":{
+                "lottery_id": 1,
+                "lottery_number": "123456"
+            }
+        }
+
++ Response 201 (application/json)
+
+    + Body
+
+            {
+                "lottery_count": 2
+            }
+            
++ Response 401 (application/json)
++ Response 404 (application/json)                        
+       
+
+
+            <!----> ----------------- db ดึงข้อมูลจากตะกรามาเเสดงของuser----------------
+### Get item in basket [GET]
+
++ Request (application/json)
+
+        {
+            "user_id": 1
+        }
+
++ Response 200 (application/json)
+
+    + Body
+
+            [
+               {
+                    "lottery_id": 1,
+                    "lottery_number": "123456"
+                },
+                {
+                    "lottery_id": 2,
+                    "lottery_number": "123456"
+                }
+            ]
+            
+            
++ Response 401 (application/json)                       
++ Response 404 (application/json)                       
+            
+            
+            <!----> ----------------- Basket Delete lottery for each user -----------------
+
+### delete item in basket  [DELETE]
+
++ Request (application/json)
+
+        {
+            "user_id":1,
+            "lottery_id": 1
+        }
+
++ Response 401 (application/json)   
++ Response 200 (application/json)
++ Response 404 (application/json)                       
+            
+            
+
+
+
+
+            <!----> ----------------- verification lotterry of user -----------------
+
+## basket/verification  [/basket/verification]
+### verify status lottery [GET]
+
++ Request (application/json)
+
+        {
+           "lottery_id":[1,2,3]
+        }
+        
++ Response 200 (application/json)
+
+    + Body
+
+            [
+                
+               {
+                    "lottery_id": "1",
+                    "lottery_number": "123456"
+                },
+                {
+                    "lottery_id": "2",
+                    "lottery_number": "123456"
+                }
+            
+            ]
+        
+                
++ Response 404 (application/json)                       
+            
+
+
+            
+            
+
+       
+
+            <!----> ----------------- ตรวจรางวัล  -----------------
+## prize [/prize]
+### Get prize [GET]
+
++ Request (application/json)
+
+        {
+            "lottery_number": "123456"
+        }
+
++ Response 200 (application/json)
+
+        {   
+            "reward_name":"1st prize",
+            "money":10000
+        }
++ Response 200 (application/json)
+
+        {   
+            "reward_name":"3 page numbers",
+            "money":3000
+        }
++ Response 200 (application/json)
+
+        {   
+            "reward_name":"last 3 digits",
+            "money":3000
+        }
++ Response 200 (application/json)
+
+        {   
+            "reward_name":"ไม่ถูกรางวัล",
+            "money":0
+        }
++ Response 200 (application/json)
+
+        {   
+            "รางวัลยังไม่ประกาศผล"
+        }
++ Response 404 (application/json)
+            
+            
+            
+
+            
+            <!----> ----------------- insert lotterry to history of user -----------------
+
+## customer [/customer]
+
+### Insert lottery [POST]
+
++ Request (application/json)
+
+        {
+          "user_id": 1,
+          "lottery_number": [
+           "123456",
+           "123456"
+          ]
+        }
+        
++ Response 201 (application/json)
++ Response 404 (application/json)    
+
+### Get history lottery [GET]
+
++ Request (application/json)
+
+
+        {
+          "user_id": 1
+        }
+        
++ Response 200 (application/json) 
+
+    
+        [
+            {
+                "lottery_number": "123456",
+                "datetime":"2023-04-07 15:17:23"
+            },
+            {
+                "lottery_number": "123456",
+                "datetime":"2023-04-07 15:17:23"
+            }
+        ]
+        
+    
++ Response 401 (application/json)   
++ Response 404 (application/json) 
+
+
+
+## customer/purchasing [/customer/purchasing]
+### confirm purchasing [POST]
+
+  + Request (application/json)
+
+        {
+            "user_id": 1,
+            "lottery":[
+                {
+                    "lottery_id": 1,
+                    "lottery_number": "123456"
+                },
+                {
+                    "lottery_id": 2,
+                    "lottery_number": "123456"
+                }
+            ]
+            
+        }
+
++ Response 201 (application/json)
++ Response 200 (application/json)
+
+    + Body
+
+            [
+                
+               {
+                    "lottery_id": "1",
+                    "lottery_number": "123456"
+                },
+                {
+                    "lottery_id": "2",
+                    "lottery_number": "123456"
+                }
+            
+            ]
+            
++ Response 404 (application/json)       
++ Response 401 (application/json)   
+
+
+            
+
+
+        ------------------------------------ Admin insert lot n amount ------------------------------------ 
+
+## admin/lottery [/admin/lottery/]
+
+
+        <!-----========================= Show All lot for day  =========================-->
+### Get all lottery [GET]
+
++ Request (application/json)
+
+        {
+            "admin_id":1
+        }
+        
++ Response 200 (application/json)
+
+    + Body
+
+    
+            [
+            
+                {
+                    "date":"19/03/2566",
+                    "lottery_count":10
+                },
+                {
+                    "date":"20/03/2566",
+                    "lottery_count":20
+                }
+
+            ]
+          
+            
+            
+            
++ Response 401 (application/json)   
++ Response 404 (application/json)   
+
+        <!-----========================= genered lot for n number   =========================-->
+### insert lottery [POST]
+
++ Request (application/json)
+
+        {   
+            "admin_id":1,
+            "lottery_count": 10,
+        }
+        
++ Response 201 (application/json)
++ Response 401 (application/json)   
++ Response 404 (application/json)                        
+       
+       
+       
+        ------------------------------------ Admin delete stock lot ------------------------------------ 
+
+### delete lottery [DELETE]
+
+
++ Request (application/json)
+
+        {
+            "admin_id":"1",
+            "date":"2023-04-07"
+        }
+        
++ Response 200 (application/json)
++ Response 401 (application/json)   
++ Response 404 (application/json)               
+            
+  
+  
+
+
+
+## admin/prize [/admin/prize]
+
+
+        <!-----========================= Show All reward  =========================-->
+        
+### Get prize [GET]
+
++ Request (application/json)
+
+        {
+           "admin_id":1
+        }
+        
++ Response 200 (application/json)
+
+    + Body
+    
+            [
+                    {
+                        "reward_number":"123456",
+                        "date":"12/03/2566"
+                    },
+                    {
+                        "reward_number":"123456",
+                        "date":"13/03/2566"
+                    }
+                
+            ]
+
++ Response 401 (application/json) 
++ Response 404 (application/json)   
+
+        <!-----========================= insert reward  =========================-->
+### insert prize [POST]
+
++ Request (application/json)
+
+        {
+            "admin_id":1,
+            "reward_number":"123456"
+        }
+        
++ Response 201 (application/json)
+
++ Response 405 (application/json)           
+
+    + Body
+    
+            {
+                "ได้ออกรางวัลสำหรับวันนี้เเล้ว"
+            }
+                    
++ Response 401 (application/json)  
++ Response 404 (application/json)               
+
+
+
+
+        
+
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+            
+            
+            
