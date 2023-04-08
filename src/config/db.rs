@@ -1,6 +1,5 @@
 
 use mysql::*;
-use mysql::prelude::*;
     
 
 pub fn conDB() -> std::result::Result<PooledConn, Box<dyn std::error::Error>> {

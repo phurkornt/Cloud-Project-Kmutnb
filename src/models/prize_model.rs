@@ -3,7 +3,6 @@ use mysql::*;
 use mysql::prelude::*;
 
 use crate::config::db::conDB;
-use crate::controllers::lottery;
 use chrono::{Local, DateTime};
 //  ---------------------------------- Data Input ----------------------------------
 #[derive(Debug,Serialize, Deserialize)]

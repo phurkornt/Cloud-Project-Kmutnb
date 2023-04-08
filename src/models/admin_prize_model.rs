@@ -20,9 +20,6 @@ pub struct AdminIDAndReward {
     pub reward_number: String
 }
 
-
-
-
 //  ---------------------------------- Data Output ----------------------------------
 
 #[derive(Debug,Serialize, Deserialize)]

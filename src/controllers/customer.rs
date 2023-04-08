@@ -10,10 +10,10 @@ use crate::models::basket_model::{Lottery};
 
 // use std::convert::TryFrom;
 
-#[post("/customer")]
+#[post("/customer")] //[/]
 async fn post_customer_lottery(lottery_number: web::Json<LotteryWithUserID>) -> impl Responder {
    
-    debug!("{:?}" , lottery_number);
+    // debug!("{:?}" , lottery_number);
     
     let lot = lottery_number.into_inner();
 
@@ -21,7 +21,7 @@ async fn post_customer_lottery(lottery_number: web::Json<LotteryWithUserID>) -> 
         insert_user_history(lot.user_id ,i);
     }
 
-    return HttpResponse::Ok();
+    return HttpResponse::Created();
 }
 
 #[post("/customer/purchasing")]
@@ -91,6 +91,7 @@ async fn post_customer_purchasing(lottery: web::Json<LotteryList>) -> impl Respo
     }
 
     // api in this function
+    
     // ตรวจสอบเลขซ้่ำ [/]
     // insert ลง history ลูกค้า [/]
     // เปลี่ยน status ของ lottery หลัก [/]
@@ -103,7 +104,7 @@ async fn post_customer_purchasing(lottery: web::Json<LotteryList>) -> impl Respo
 }
 
     
-#[get("/customer")]
+#[get("/customer")] //[/]
 async fn get_customer_lottery(user: web::Json<UserID>) -> impl Responder {
    
     // debug!("{:?}" , lottery_number);

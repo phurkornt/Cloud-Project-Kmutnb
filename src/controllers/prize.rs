@@ -1,7 +1,5 @@
 
-use actix_web::{web, get , Responder, HttpResponse, http::StatusCode};
-use serde_json::json;
-use serde::Deserialize;
+use actix_web::{web, get , Responder, HttpResponse};
 use log::{debug};
 
 
@@ -10,7 +8,7 @@ use crate::models::prize_model::{LotteryNumber , LotteryReward ,get_prize_with_d
 // use std::convert::TryFrom;
 
 
-#[get("/prize")]
+#[get("/prize")] //[/]
 async fn get_prize(lottery_number: web::Json<LotteryNumber>) -> impl Responder {
     debug!("{:?}" , &lottery_number);
 
@@ -21,16 +19,16 @@ async fn get_prize(lottery_number: web::Json<LotteryNumber>) -> impl Responder {
     let lot_number = lottery_number.into_inner();
     let prize = get_prize_with_date();
 
-
-    let mut reward_name:String;
-    let mut money:u32;
-
+   
     if prize == ""{
         
         return HttpResponse::Ok().json("รางวัลยังไม่ประกาศผล");
         
     }else{
 
+        let mut reward_name:String;
+        let mut money:u32;
+    
         if prize == lot_number.lottery_number{
             reward_name = "รางวัลที่1".to_string();
             money = 10000;
@@ -45,7 +43,6 @@ async fn get_prize(lottery_number: web::Json<LotteryNumber>) -> impl Responder {
             money = 0;
         }
     
-        // debug!("Test reward : {}",prize);
         let res = LotteryReward{
             reward_name:reward_name,
             money:money
@@ -53,4 +50,5 @@ async fn get_prize(lottery_number: web::Json<LotteryNumber>) -> impl Responder {
     
         return HttpResponse::Ok().json(res);
     }
+
 }

@@ -4,8 +4,6 @@ use mysql::prelude::*;
 use crate::config::db::conDB;
 use chrono::{Local, DateTime};
 
-use rand::seq::SliceRandom;
-
 
 //  ---------------------------------- Data Input ----------------------------------
 #[derive(Debug, Deserialize, Serialize)]
@@ -142,7 +140,7 @@ pub fn insert_lottery(lottery_number:String){
 
 
 // ####################### delete_lottery_byDate ->"" #######################
-pub fn delete_lottery_byDate(date:String){
+pub fn delete_lottery_by_date(date:String){
     let _ = match conDB() {
         Ok(mut conn) => {
             conn.exec_drop(

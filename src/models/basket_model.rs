@@ -4,6 +4,12 @@ use mysql::prelude::*;
 use crate::config::db::conDB;
 
 
+#[derive(Debug , Deserialize)]
+pub struct GetUserData {
+    pub user_id:i32
+}
+
+
 #[derive(Debug,Serialize, Deserialize)]
 pub struct Lottery {
     pub lottery_id: u32,
@@ -43,10 +49,9 @@ pub struct CountBasketUser {
 }
 
 
-//-----------------------------------------------------------------------------
 
 
-// --------------------- Get count lottery ของ user  ---------------------
+// ####################### Get count lottery ของ user  #######################
 pub fn get_user_count_basket(user_id:u32) -> u32{
     let db = conDB()
     .map(|mut conn| {
@@ -80,7 +85,8 @@ pub fn get_user_count_basket(user_id:u32) -> u32{
     
 }
 
-//  ------------------ get user basket lottery -> user_id , loterry_id  ------------------
+
+//  ####################### get user basket lottery -> user_id , loterry_id  #######################
 pub fn get_user_lottery_id() -> Vec<LotteryIDwithUserID>{
 
     let db = conDB()
@@ -116,7 +122,7 @@ pub fn get_user_lottery_id() -> Vec<LotteryIDwithUserID>{
 }
 
 
-//  ------------------ get user basket lottery -> user_id , loterry_id  ------------------
+//  ####################### get user basket lottery -> user_id , loterry_id  #######################
 pub fn get_user_lottery_number() -> Vec<Lottery>{
     let db = conDB()
     .map(|mut conn| {
@@ -152,7 +158,7 @@ pub fn get_user_lottery_number() -> Vec<Lottery>{
 
 
 
-//  ------------------ insert user basket ------------------
+//  ####################### insert user basket #######################
 pub fn insert_user_basket(user_id:u32 , lottery_id:u32){
 
     let _ = match conDB() {
@@ -172,7 +178,7 @@ pub fn insert_user_basket(user_id:u32 , lottery_id:u32){
 }
 
 
-//  ------------------ delete user basket by lot_id ------------------
+//  ####################### delete user basket by lot_id #######################
 pub fn delete_user_basket(user_id:u32 , lottery_id:u32){
 
     let _ = match conDB() {
@@ -193,7 +199,7 @@ pub fn delete_user_basket(user_id:u32 , lottery_id:u32){
 
 
 
-// --------------------- Get vertifycation lottery ของ user กับ lottery หลัก   ---------------------
+// ####################### Get vertifycation lottery ของ user กับ lottery หลัก   #######################
 pub fn get_user_lottery_soldout(list_lottery:Vec<u32>) -> Vec<Lottery>{
     let list_lottery_string = list_lottery.iter().map(|n| n.to_string()).collect::<Vec<String>>().join(",");
     let list_lottery_str: &str = &list_lottery_string;

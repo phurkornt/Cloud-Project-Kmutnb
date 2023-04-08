@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Error 404 Page not found</title>
+    <!-- <link rel="stylesheet" href="src/public/404.css"> -->
+    <style>
+                @import url('https://fonts.googleapis.com/css2?family-Poppins:wght@300;400;500;600;700;800;9008 display=swap');
+        *
+        {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box; 
+            font-family: 'Poppins', sans-serif;
+        }
+        body
+        {
+            display: flex;
+            justify-content: center;
+            align-items: center; 
+            min-height: 100vh;
+            background: #23242a;
+        }
+        .box
+        {
+            position: relative;
+            width: 500px;
+            height: 140px;
+            background: O#1c1c1c; 
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .box::before
+        {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 500px;
+            height: 140px;
+            background: linear-gradient(0deg,transparent,transparent,#45f3ff,#45f3ff,#45f3ff);
+            z-index: 1;
+            transform-origin: bottom right;
+            animation: animate 3s linear infinite;
+        }
+        .box::after
+        {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 500px;
+            height: 140px;
+            background: linear-gradient(0deg,transparent,transparent,#ff00aa,#ff00aa,#ff00aa);
+            z-index: 1;
+            transform-origin: bottom right;
+            animation: animate 3s linear infinite;
+            animation-delay: -1.5s;
+        }
+        .borderLine
+        {
+            position: absolute;
+            top: 0;
+            inset: 0;
+        }
+
+        @keyframes animate
+        {
+            0%
+            {
+                transform: rotate(0deg);
+            }
+            100%
+            {
+                transform: rotate(360deg);
+            }
+
+        }
+        .box form
+        {
+            position: absolute;
+            inset: 4px;
+            background: #222; 
+            padding: 50px 40px; 
+            border-radius: 8px;
+            z-index: 2; 
+            display: flex;
+            flex-direction: column;
+        }
+        .box form h1
+        {
+            color:#fff;
+            font-weight: 500;
+            text-align: center; 
+            letter-spacing: 0. 1em;
+        }
+
+    </style>
+</head>
+
+
+<body>
+    <div class= "box">
+        <span class="borderLine"></span>
+        <form>
+            <h1>Error 404 Page not found</h1>
+                      
+        </form>  
+         
+    </div>
+    
+</body>
+</html>

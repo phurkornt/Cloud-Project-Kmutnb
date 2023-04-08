@@ -1,5 +1,5 @@
 
-use actix_web::{web, get ,post ,delete , Responder, HttpResponse, http::StatusCode};
+use actix_web::{web, get ,post ,delete , Responder, HttpResponse };
 
 use log::debug;
 
@@ -8,7 +8,7 @@ use crate::models::admin_lotterry_model::*;
 use rand::seq::SliceRandom;
 
 
-#[get("/admin/lottery")]
+#[get("/admin/lottery")] //[/]
 async fn get_admin_lottery(admin: web::Json<AdminID>) -> impl Responder {
 
     if admin.admin_id == 1{
@@ -17,9 +17,7 @@ async fn get_admin_lottery(admin: web::Json<AdminID>) -> impl Responder {
         for i in all_date{
             lottery_detail.push(get_lottery(i.date));
         }
-        // debug!("Test Get {:?}",lottery_detail);
         return HttpResponse::Ok().json(lottery_detail);
-
     }else{
 
         return HttpResponse::Unauthorized().json("Error");
@@ -28,9 +26,7 @@ async fn get_admin_lottery(admin: web::Json<AdminID>) -> impl Responder {
 
 }
 
-
-
-#[post("/admin/lottery")]
+#[post("/admin/lottery")] //[/]
 async fn post_admin_lottery(admin: web::Json<AdminIDCount>) -> impl Responder {
     let admin = admin.into_inner();
     if admin.admin_id == 1{
@@ -46,15 +42,14 @@ async fn post_admin_lottery(admin: web::Json<AdminIDCount>) -> impl Responder {
 
         return HttpResponse::Unauthorized().json("Error");
     }
-    
-    return HttpResponse::Ok().json("OK post admin");
 }
-#[delete("/admin/lottery")]
+
+#[delete("/admin/lottery")] //[/]
 async fn delete_admin_lottery(admin: web::Json<AdminIdDate>) -> impl Responder {
     let admin = admin.into_inner();
     if admin.admin_id == 1{
 
-        delete_lottery_byDate(admin.date);
+        delete_lottery_by_date(admin.date);
         return HttpResponse::Ok().json("lottery_detail");
 
     }else{

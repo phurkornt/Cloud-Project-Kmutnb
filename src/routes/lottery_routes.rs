@@ -7,3 +7,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .service(get_lottery)
         .service(put_lottery);
 }
+
+
+
+
+

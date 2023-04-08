@@ -5,6 +5,14 @@ use mysql::prelude::*;
 
 use crate::config::db::conDB;
 
+
+#[derive(Deserialize , Serialize)]
+pub struct GetUserData {
+    pub user_id:i32
+}
+
+
+
 #[derive(Debug,Serialize, Deserialize)]
 pub struct Lottery {
     pub lottery_id: u32,
@@ -31,7 +39,7 @@ pub struct UpdateStatus{
 
 
 
-// --------------------- Get All lottery in db ---------------------
+// ####################### Get All lottery in db #######################
 pub fn get_lottery() -> Vec<Lottery>{
     let db = conDB()
     .map(|mut conn| {
@@ -67,8 +75,7 @@ pub fn get_lottery() -> Vec<Lottery>{
     
 }
 
-
-// --------------------- update status with [1,2,3,4] , "status:sold-out" ---------------------
+// ####################### update status with [1,2,3,4] , "status:sold-out" #######################
 pub fn update_lottery_status(list_lottery_id:Vec<u32> ,status:String){
 
     let list_lottery_string = list_lottery_id.iter().map(|n| n.to_string()).collect::<Vec<String>>().join(",");
@@ -90,25 +97,5 @@ pub fn update_lottery_status(list_lottery_id:Vec<u32> ,status:String){
     
 }
 
-
-
-/*
-
-
-
-// let mut tt:UserLottery = Default::default();
-// match db {
-//     Ok(lotteries) => {
-//         tt = UserLottery{
-//             user_basket_count:u32::try_from(lotteries.len()).unwrap(),
-//             lottery_all:lotteries
-//         };
-//         // for lottery in lotteries {
-//         //     debug!("Lottery ID: {}, Lottery Number: {}", lottery.lottery_id, lottery.lottery_number);
-//         // }
-//     }
-//     Err(e) => println!("Error: {}", e)
-// }
- */
 
 
