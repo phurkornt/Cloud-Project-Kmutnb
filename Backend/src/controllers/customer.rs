@@ -31,63 +31,69 @@ async fn post_customer_purchasing(lottery: web::Json<LotteryList>) -> impl Respo
 
     let lot = &lottery.into_inner();
 
-    // ------- ประกอบชุดข้อมูล -------
-    let mut lot_id:Vec<u32> =  Vec::new();
-    let mut lot_number:Vec<String> =  Vec::new();
-    
-    for i in &lot.lottery{
-        lot_id.push(i.lottery_id);
-        lot_number.push(i.lottery_number.clone());
-    }
-    let struct_insert = LotteryWithUserID{
-        user_id:lot.user_id,
-        lottery_number:lot_number
-    };
+    if lot.user_id == 1{
 
-    let client = reqwest::Client::new();
-    let body = json!({"lottery_id":lot_id });
-    let response = client
-        .get("http://127.0.0.1:3000/basket/verification")
-        .json(&body)
-        .send()
-        .await
-        .unwrap()
-        .json::<Vec<Lottery>>() // แปลง JSON เป็น struct LotteryList
-        .await
-        .unwrap();
-
-    if response.len() <= 0{
-
-        let body_insert = json!(struct_insert);
-        let _ = client
-            .post("http://127.0.0.1:3000/customer")
-            .json(&body_insert)
-            .send()
-            .await
-            .unwrap();
-
-
-        let body_status = json!({"lottery_id":lot_id , "status":"sold-out" });
-        let _ = client
-            .put("http://127.0.0.1:3000/lottery")
-            .json(&body_status)
-            .send()
-            .await
-            .unwrap();
+        // ------- ประกอบชุดข้อมูล -------
+        let mut lot_id:Vec<u32> =  Vec::new();
+        let mut lot_number:Vec<String> =  Vec::new();
         
-        for i in lot_id{
-            let body_delete = json!({"user_id":lot.user_id , "lottery_id":i });
+        for i in &lot.lottery{
+            lot_id.push(i.lottery_id);
+            lot_number.push(i.lottery_number.clone());
+        }
+        let struct_insert = LotteryWithUserID{
+            user_id:lot.user_id,
+            lottery_number:lot_number
+        };
+
+        let client = reqwest::Client::new();
+        let body = json!({"lottery_id":lot_id });
+        let response = client
+            .get("http://127.0.0.1:3000/basket/verification")
+            .json(&body)
+            .send()
+            .await
+            .unwrap()
+            .json::<Vec<Lottery>>() // แปลง JSON เป็น struct LotteryList
+            .await
+            .unwrap();
+
+        if response.len() <= 0{
+
+            let body_insert = json!(struct_insert);
             let _ = client
-                .delete("http://127.0.0.1:3000/basket")
-                .json(&body_delete)
+                .post("http://127.0.0.1:3000/customer")
+                .json(&body_insert)
                 .send()
                 .await
                 .unwrap();
+
+
+            let body_status = json!({"lottery_id":lot_id , "status":"sold-out" });
+            let _ = client
+                .put("http://127.0.0.1:3000/lottery")
+                .json(&body_status)
+                .send()
+                .await
+                .unwrap();
+            
+            for i in lot_id{
+                let body_delete = json!({"user_id":lot.user_id , "lottery_id":i });
+                let _ = client
+                    .delete("http://127.0.0.1:3000/basket")
+                    .json(&body_delete)
+                    .send()
+                    .await
+                    .unwrap();
+            }
+
+            HttpResponse::Ok().json("succeed")
+        }else{
+            HttpResponse::Ok().json(response)
         }
 
-        HttpResponse::Ok().json("")
     }else{
-        HttpResponse::Ok().json(response)
+        HttpResponse::Unauthorized().json("Error")
     }
 
     // api in this function
@@ -113,7 +119,7 @@ async fn get_customer_lottery(user: web::Json<UserID>) -> impl Responder {
     if user_data.user_id == 1{
         
         let data = get_user_history(user_data.user_id);
-        debug!("testRead {:?}",data);
+        // debug!("testRead {:?}",data);
         
         return HttpResponse::Ok().json(data);
 

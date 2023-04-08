@@ -34,7 +34,7 @@ async fn put_lottery(lottery: web::Json<UpdateStatus>) -> impl Responder {
     let lot = lottery.into_inner();
     update_lottery_status(lot.lottery_id ,lot.status);
 
-    HttpResponse::Ok().body("")
+    HttpResponse::Ok().body("succeed")
 }
 
 

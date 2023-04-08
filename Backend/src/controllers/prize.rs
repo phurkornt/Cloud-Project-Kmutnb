@@ -1,6 +1,6 @@
 
 use actix_web::{web, get , Responder, HttpResponse};
-use log::{debug};
+// use log::{debug};
 
 
 
@@ -10,7 +10,7 @@ use crate::models::prize_model::{LotteryNumber , LotteryReward ,get_prize_with_d
 
 #[get("/prize")] //[/]
 async fn get_prize(lottery_number: web::Json<LotteryNumber>) -> impl Responder {
-    debug!("{:?}" , &lottery_number);
+    // debug!("{:?}" , &lottery_number);
 
     //  * ## เงื่อนไขรางวัล ##
     //  * ที่ 1 เลขถูกทุกตัว

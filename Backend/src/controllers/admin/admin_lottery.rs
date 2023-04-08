@@ -1,7 +1,7 @@
 
 use actix_web::{web, get ,post ,delete , Responder, HttpResponse };
 
-use log::debug;
+// use log::debug;
 
 
 use crate::models::admin_lotterry_model::*;
@@ -32,11 +32,11 @@ async fn post_admin_lottery(admin: web::Json<AdminIDCount>) -> impl Responder {
     if admin.admin_id == 1{
         let number = random_numbers(admin.lottery_count as usize);
         for i in 0..admin.lottery_count{
-            debug!("Test Get {:?}","1");
+            // debug!("Test Get {:?}","1");
             insert_lottery(number[i as usize].to_string());
         }
 
-        return HttpResponse::Ok().json("lottery_detail");
+        return HttpResponse::Ok().json("succeed");
 
     }else{
 
@@ -50,7 +50,7 @@ async fn delete_admin_lottery(admin: web::Json<AdminIdDate>) -> impl Responder {
     if admin.admin_id == 1{
 
         delete_lottery_by_date(admin.date);
-        return HttpResponse::Ok().json("lottery_detail");
+        return HttpResponse::Ok().json("succeed");
 
     }else{
 

@@ -34,7 +34,7 @@ async fn post_admin_prize(reward: web::Json<AdminIDAndReward>) -> impl Responder
 
             // insert
             insert_reward(reward_number);
-            return HttpResponse::Ok().json("สำเร็จ");
+            return HttpResponse::Ok().json("succeed");
         }else{
             return HttpResponse::PreconditionFailed().json("ได้ออกรางวัลสำหรับวันนี้เเล้ว");
         }
